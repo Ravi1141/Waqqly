@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Find Walkers</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <style>
+      .walker-card {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <button><a href="/users/login">Sign Out</a></button>
+      <button><a href="/users/bookings">My Bookings</a></button>
+      <h2>Find Walkers</h2>
+
+      <!-- Form to input distance and submit as a GET request -->
+      <form action="/users/findWalkers" method="GET">
+        <label for="distance">Enter Distance in Meters:</label>
+        <input type="number" id="distance" name="distance" min="10" required />
+        <button type="submit" class="btn btn-primary">Find Walkers</button>
+      </form>
+
+      <!-- Loop through the list of walkers and generate cards -->
+      <div id="walkers-list">
+        <% walkers.forEach((walker) => { %>
+        <div class="walker-card">
+          <h3>Name: <%= walker.name %></h3>
+          <p>Address: <%= walker.address %></p>
+          <p>Lat: <%= walker.lat %></p>
+          <p>Lng: <%= walker.long %></p>
+          <p>Preferred Times: <%= walker.preferredTime %></p>
+          <!-- Book button to open the booking modal -->
+          <button
+            type="button"
+            class="btn btn-success"
+            data-toggle="modal"
+            data-target="#bookingModal"
+            onclick="openBookingForm('<%= walker._id %>')"
+          >
+            Book
+          </button>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+
+    <!-- Bootstrap modal for booking -->
+    <div
+      class="modal fade"
+      id="bookingModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="bookingModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bookingModalLabel">Book Walker</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="bookingForm" action="/bookings" method="POST">
+              <input type="hidden" name="walkerId" id="walkerId" />
+              <div class="form-group">
+                <label for="fromTime">From Time:</label>
+                <input
+                  type="time"
+                  class="form-control"
+                  id="from"
+                  name="from"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="toTime">To Time:</label>
+                <input
+                  type="time"
+                  class="form-control"
+                  id="to"
+                  name="to"
+                  required
+                />
+              </div>
+              <div id="error-message" class="text-danger hidden">
+                "From" time must be earlier than "To" time.
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="submit" form="bookingForm" class="btn btn-success">
+              Book
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function openBookingForm(walkerId) {
+        const walkerIdInput = document.getElementById("walkerId");
+        walkerIdInput.value = walkerId;
+      }
+
+      // Validate the form to ensure 'from' time is earlier than 'to' time
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("bookingForm"); // Get the form element
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault(); // Prevent default form submission
+
+          const fromTime = document.getElementById("from").value; // Get "From" time
+          const toTime = document.getElementById("to").value; // Get "To" time
+
+          // Validate that "From" time is earlier than "To" time
+          if (fromTime >= toTime) {
+            document.getElementById("error-message").classList.remove("hidden"); // Show error message
+            return; // Exit without submitting
+          }
+
+          document.getElementById("error-message").classList.add("hidden"); // Hide error message if valid
+
+          const formData = {
+            walker: document.getElementById("walkerId").value, // Assuming this is set elsewhere
+            from: fromTime,
+            to: toTime,
+          };
+
+          fetch("/users/bookings", {
+            method: "POST", // Use POST for form submission
+            headers: {
+              "Content-Type": "application/json", // Send data as JSON
+            },
+            body: JSON.stringify(formData), // Convert form data to JSON
+          })
+            .then((response) => {
+              if (response.ok) {
+				  alert("Booking made"); 
+				  window.location.reload(); 
+                	response = response.json(); // Parse the response
+					console.log(response); 
+              } else {
+                throw new Error(`Error: ${response.statusText}`);
+              }
+            })
+            .then((data) => {
+              console.log("Booking successful:", data); // Handle success
+              // Optionally, redirect or show a success message
+            })
+            .catch((error) => {
+              console.error("Error during booking:", error); // Handle errors
+              // Optionally, show an error message to the user
+            });
+        });
+      });
+    </script>
+  </body>
+</html>

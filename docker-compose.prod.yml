@@ -1,0 +1,62 @@
+services:
+  gateway:
+    image: 637423360833.dkr.ecr.us-east-1.amazonaws.com/waqqly-gateway:latest
+    ports:
+      - 80:3000
+    depends_on:
+      - bookings
+      - users
+      - walkers
+    networks:
+      - waqqly
+
+  bookings:
+    image: 637423360833.dkr.ecr.us-east-1.amazonaws.com/waqqly-bookings:latest
+    depends_on:
+      - db
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://db/Booking
+      - JWT_SECRET=walker_booking
+      - NODE_ENV=development
+      - APP_URI=http://gateway:3000
+    networks:
+      - waqqly
+
+  users:
+    image: 637423360833.dkr.ecr.us-east-1.amazonaws.com/waqqly-users:latest
+    depends_on:
+      - db
+      - bookings
+      - walkers
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://db/User
+      - JWT_SECRET=walker_booking
+      - NODE_ENV=development
+      - APP_URI=http://gateway:3000
+    networks:
+      - waqqly
+
+  walkers:
+    image: 637423360833.dkr.ecr.us-east-1.amazonaws.com/waqqly-walkers:latest
+    depends_on:
+      - db
+      - bookings
+    environment:
+      - PORT=3000
+      - MONGODB_URI=mongodb://db/Walker
+      - JWT_SECRET=walker_booking
+      - NODE_ENV=development
+      - APP_URI=http://gateway:3000
+    networks:
+      - waqqly
+
+  db:
+    image: mongo:latest
+    networks:
+      - waqqly
+
+networks:
+  waqqly:
+    driver: bridge

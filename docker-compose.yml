@@ -1,0 +1,50 @@
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - 3000:3000
+    depends_on:
+      - bookings
+      - users
+      - walkers
+    networks:
+      - waqqly
+
+  bookings:
+    build: ./bookings
+    depends_on:
+      - db
+    env_file:
+      - ./bookings/.env.prod
+    networks:
+      - waqqly
+
+  users:
+    build: ./users
+    depends_on:
+      - db
+      - bookings
+      - walkers
+    env_file:
+      - ./users/.env.prod
+    networks:
+      - waqqly
+
+  walkers:
+    build: ./walkers
+    depends_on:
+      - db
+      - bookings
+    env_file:
+      - ./walkers/.env.prod
+    networks:
+      - waqqly
+
+  db:
+    image: mongo
+    networks:
+      - waqqly
+
+networks:
+  waqqly:
+    driver: bridge

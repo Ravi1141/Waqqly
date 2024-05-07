@@ -1,0 +1,24 @@
+{
+  "name": "waqq",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -n 'Server,Bookings,User,Walker' -c 'blue,green,magenta,red' \"nodemon index.js\" \"cd ../bookings && nodemon server.js\" \"cd ../users && nodemon server.js\" \"cd ../walkers && nodemon server.js\"",
+    "start": "concurrently -n 'Server,Bookings,User,Walker' -c 'blue,green,magenta,red' \"pm2 start index.js\" \"cd ../bookings && pm2 start server.js\" \"cd ../users && pm2 start server.js\" \"cd ../walkers && pm2 start server.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-http-proxy": "^2.0.0",
+    "pm2": "^5.3.1"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.0"
+  }
+}
