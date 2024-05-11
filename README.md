@@ -40,8 +40,6 @@ Before running this project, ensure you've added the necessary environment varia
 
 ### Docker (Preferred Method)
 
-![waqqly drawio](https://github.com/Ravi1141/Waqqly/assets/105180025/c0030dab-8cbb-459b-8c6f-c34d2d3d1d85)
-
 1. **Install Docker and Docker Compose**: Ensure both Docker and Docker Compose are installed on your system.
 
 2. **Run Docker Compose**: Use the following command to build and run the Docker containers:
@@ -62,6 +60,9 @@ Waqqly is deployed on Kubernetes. Follow these steps to deploy the project:
 
 ![image](https://github.com/Ravi1141/Waqqly/assets/105180025/533acbf7-2958-4aaa-8607-a0a8ffdc97be)
 
+## Communication between Services
+
+![waqqly drawio](https://github.com/Ravi1141/Waqqly/assets/105180025/c0030dab-8cbb-459b-8c6f-c34d2d3d1d85)
 
 
 1. **Setup Kubernetes Cluster**: Ensure you have a Kubernetes cluster running, either on a cloud provider or on-premise.
