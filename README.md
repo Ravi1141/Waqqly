@@ -1,96 +1,85 @@
 # Waqqly: A web app for booking local dog walkers!
 
-This user-friendly web app connects dog owners with reliable walkers in their area, streamlining scheduling and ensuring happy pups (and stress-free owners)!
+Welcome to Waqqly, a user-friendly web app designed to connect dog owners with reliable walkers in their area. Our platform streamlines scheduling, making sure both pups and their owners are happy and stress-free!
 
 ## Environment Variables
 
-To run this project, you will need to add the following environment variables to your .env file.
+Before running this project, ensure you've added the necessary environment variables to your `.env` file. Each micro-service comes with its own `.env` file.
 
-The `.env` file is already present in every micro-service.
+## Installation Guide
 
-## Run Locally
+### Manual Setup
 
-### Manual
+1. **Clone the Repository**: First, make sure you have Git installed on your system. Then, clone the repository using the following command:
+   
+    ```bash
+    git clone <project-url>
+    ```
 
-- Make sure you install `git` in your system and then clone the repo.
+2. **Install Node.js**: Ensure you have Node.js installed on your system. Then, navigate to each directory (except the gateway) and initialize the micro-services. For example:
 
-```bash
-  git clone <project-url>
-```
+    ```bash
+    cd bookings
+    npm install
+    ```
 
-- Install `Nodejs` in you system and then go into each directory and initialize that micro-service.
-  One such example is given below.
+    Repeat this process for all sub-directories except the gateway.
 
-```bash
-  cd bookings
-  npm install
-```
+3. **Initialize the Gateway**: Navigate to the gateway directory and install its dependencies:
 
-- Do this for all sub-directories except the gateway and then go into gateway directory.
+    ```bash
+    cd gateway
+    npm install
+    ```
 
-```bash
-  cd gateway
-  npm install
-  npm dev
-```
+4. **Start the Server**: Run the following command to start the server in development mode. The app will be served on `localhost:3000`.
 
-- This will start the server in development mode and will serve on `localhost:3000`.
+    ```bash
+    npm run dev
+    ```
 
-### Docker (Preffred method)
+### Docker (Preferred Method)
 
-- Install `Docker` and `docker compose` in your system and run the following command.
+1. **Install Docker and Docker Compose**: Ensure both Docker and Docker Compose are installed on your system.
 
-```bash
-  docker compose -f docker-compose.yml down && \
-  docker compose -f docker-compose.yml up --build
-```
+2. **Run Docker Compose**: Use the following command to build and run the Docker containers:
 
-- If this shows an error that `docker compose` command not found, then try the following commands.
+    ```bash
+    docker-compose -f docker-compose.yml down && \
+    docker-compose -f docker-compose.yml up --build
+    ```
 
-```bash
-  docker-compose -f docker-compose.yml down && \
-  docker-compose -f docker-compose.yml up --build
-```
+    If the `docker-compose` command is not found, try `docker compose` instead.
 
-- This will kill any docker processes if running, build the images from scratch and then run the containers.
-- This server will also serve on `localhost:3000`.
+    This will build the Docker images from scratch and run the containers. The server will also be served on `localhost:3000`.
 
 ## Deployment
 
-This project is deployed on Kubernetes.
+Waqqly is deployed on Kubernetes. Follow these steps to deploy the project:
 
-### Architecture
-This is how the architecture of our deployment looks like on AWS.
+1. **Setup Kubernetes Cluster**: Ensure you have a Kubernetes cluster running, either on a cloud provider or on-premise.
 
-![alt text](image.png)
+2. **Install kubectl**: Install `kubectl` and connect it to your Kubernetes cluster.
 
-### Deployment steps
+3. **Check Cluster Status**: Use the following command to verify that the cluster is up and running:
 
-- Make sure you have kubernetes cluster running on cloud or on-premise.
-- Install `kubectl` and connect it with your cluster
-- Use the following command to check if the cluster is up and running
+    ```bash
+    kubectl get nodes
+    ```
 
-```bash
-  kubectl get nodes
-```
+4. **Apply Configurations**: Navigate to the `k8s` directory and apply all the configuration files:
 
-- Go into the `k8s` directory
+    ```bash
+    cd k8s
+    kubectl apply -f .
+    ```
 
-```bash
-  cd k8s
-```
+    This will apply the configurations, and your app should be deployed and running.
 
-- Apply all the configuration files
+5. **Get Public IP**: To get the public IP of your cluster for testing, use the following command:
 
-```bash
-  kubectl apply -f .
-```
+    ```bash
+    kubectl get svc gateway-service -o wide
+    ```
 
-- This will apply the configurations and your app should be up and running.
-- To get the public ip of you cluster to test your app, use the following command.
-
-```bash
-  kubectl get svc gateway-service -o wide
-```
-
-This will output the details and you can see the public ip of your cluster to connect to.
+    This command will output the details, including the public IP of your cluster for connecting to the deployed app.
