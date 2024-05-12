@@ -8,7 +8,9 @@ Before running this project, ensure you've added the necessary environment varia
 
 ## Installation Guide
 
-For cloud deployment: First of all, Go to your favorite cloud provider (e.g AWS). Make a server instance (e.g EC2) of linux - Linux is preffered choice. Now ssh into this server or connect through the online connect service. Install necessary updates of Linux and then proceed towards the setup steps. 
+For cloud deployment: 
+
+First of all, Go to your favorite cloud provider (e.g AWS). Make a server instance (e.g EC2) of linux - Linux is preffered choice. Now ssh into this server or connect through the online connect service. Install necessary updates of Linux and then proceed towards the setup steps. 
 
 ### Manual Setup
 
