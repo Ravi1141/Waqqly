@@ -8,6 +8,8 @@ Before running this project, ensure you've added the necessary environment varia
 
 ## Installation Guide
 
+For cloud deployment: First of all, Go to your favorite cloud provider (e.g AWS). Make a server instance (e.g EC2) of linux - Linux is preffered choice. Now ssh into this server or connect through the online connect service. Install necessary updates of Linux and then proceed towards the setup steps. 
+
 ### Manual Setup
 
 1. **Clone the Repository**: First, make sure you have Git installed on your system. Then, clone the repository using the following command:
@@ -20,6 +22,16 @@ Before running this project, ensure you've added the necessary environment varia
 
     ```bash
     cd bookings
+    npm install
+    ```
+
+    ```bash
+    cd users
+    npm install
+    ```
+
+    ```bash
+    cd walkers
     npm install
     ```
 
@@ -38,11 +50,20 @@ Before running this project, ensure you've added the necessary environment varia
     npm run dev
     ```
 
+
+Now, your Node js application is running on your server. You can check the application running at specified port of gateway (e.g 3000) 
+
 ### Docker (Preferred Method)
 
 1. **Install Docker and Docker Compose**: Ensure both Docker and Docker Compose are installed on your system.
 
-2. **Run Docker Compose**: Use the following command to build and run the Docker containers:
+   Install docker using
+
+   ``` bash
+   sudo snap install docker
+   ```
+
+3. **Run Docker Compose**: Use the following command to build and run the Docker containers:
 
     ```bash
     docker-compose -f docker-compose.yml down && \
